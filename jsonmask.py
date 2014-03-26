@@ -1,15 +1,4 @@
-class util:
-    @classmethod
-    def isEmpty(obj):
-        return not obj
-    @classmethod
-    def isArray(cls, obj):
-        return isinstance(obj, list)
-    @classmethod
-    def has(obj, key):
-        return key in obj
-
-TERMINALS = {',': 1, '/': 2, '(': 3, ')': 4}
+TERMINALS = set(',/()')
 
 def compile(text):
     if not text:
@@ -26,7 +15,7 @@ def scan(text):
         name[0] = ''
 
     for ch in text:
-        if TERMINALS.get(ch):
+        if ch in TERMINALS:
             maybePushName()
             tokens.append({"tag": ch})
         else:
@@ -75,7 +64,7 @@ def _addToken(token, props):
 # filter.js
 #####
 def filter(obj, compiledMask):
-    if util.isArray(obj):
+    if isinstance(obj, list):
         return _arrayProperties(obj, compiledMask)
     else:
         return _properties(obj, compiledMask)
@@ -124,7 +113,7 @@ def _object(obj, key, mask):
         value = obj.get(key, None)
     except AttributeError: # obj is an int
         value = None
-    if util.isArray(value):
+    if isinstance(value, list):
         return _array(obj, key, mask)
     if mask:
         return _properties(value, mask)
@@ -137,7 +126,7 @@ def _array(obj, key, mask):
     maskedObj = None
     if not arr:
         return arr
-    if not util.isArray(arr):
+    if not isinstance(arr, list):
         return _properties(arr, mask)
     for item in arr:
         maskedObj = _properties(item, mask)
