@@ -1,6 +1,15 @@
 TERMINALS = set(',/()')
 
-def compile(text):
+class Mask(object):
+    def __init__(self, selector):
+        self.selector = selector
+        self.compiled = compile_mask(selector)
+
+    def __call__(self, data):
+        return apply_mask(data, self.compiled)
+
+
+def compile_mask(text):
     if not text:
         return None
     return parse(scan(text))
@@ -60,10 +69,7 @@ def _addToken(token, props):
     if token['properties']:
         props[token['value']]['properties'] = token['properties']
 
-######
-# filter.js
-#####
-def filter(obj, compiledMask):
+def apply_mask(obj, compiledMask):
     if isinstance(obj, list):
         return _arrayProperties(obj, compiledMask)
     else:

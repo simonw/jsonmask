@@ -191,7 +191,7 @@ filter_test_expected = {
 class TestCase(unittest.TestCase):
 
     def test_filter(self):
-        actual = jsonmask.filter(filter_test_object, filter_test_compiled_mask)
+        actual = jsonmask.apply_mask(filter_test_object, filter_test_compiled_mask)
         self.assertEqual(filter_test_expected, actual)
 
 def make_test(test):
@@ -200,14 +200,14 @@ def make_test(test):
     m = test['m']
 
     def _test(self):
-        self.assertEqual(e, jsonmask.filter(o, jsonmask.compile(m)))
+        self.assertEqual(e, jsonmask.Mask(m)(o))
     _test.__doc__ = 'm = %s   original = %s   expected = %s\n' % (m, o, e)
     return _test
 
 
 def make_compiler_test(sel, expected_compiled):
     def _test(self):
-        self.assertEqual(expected_compiled, jsonmask.compile(sel))
+        self.assertEqual(expected_compiled, jsonmask.compile_mask(sel))
     _test.__doc__ = 'sel = %s   expected = %s' % (sel, expected_compiled)
     return _test
 
