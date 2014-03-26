@@ -1,4 +1,4 @@
-TERMINALS = set(',/()')
+_TERMINALS = set(',/()')
 
 class Mask(object):
     def __init__(self, selector):
@@ -12,9 +12,9 @@ class Mask(object):
 def compile_mask(text):
     if not text:
         return None
-    return parse(scan(text))
+    return _parse(_scan(text))
 
-def scan(text):
+def _scan(text):
     tokens = []
     name = [""]
     def maybePushName():
@@ -24,7 +24,7 @@ def scan(text):
         name[0] = ''
 
     for ch in text:
-        if ch in TERMINALS:
+        if ch in _TERMINALS:
             maybePushName()
             tokens.append({"tag": ch})
         else:
@@ -32,7 +32,7 @@ def scan(text):
     maybePushName()
     return tokens
 
-def parse(tokens):
+def _parse(tokens):
     return _buildTree(tokens, {}, [])
 
 def _buildTree(tokens, parent, stack):
