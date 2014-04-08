@@ -8,6 +8,9 @@ class Mask(object):
     def __call__(self, data):
         return apply_mask(data, self.compiled)
 
+    def __repr__(self):
+        return '<Mask: %s>' % self.selector
+
 
 def compile_mask(text):
     if not text:
