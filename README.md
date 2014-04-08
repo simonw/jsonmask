@@ -14,7 +14,7 @@ to the JSON returned from <http://www.reddit.com/.json>
 ```python
 import urllib, json, jsonmask
 data = json.load(urllib.urlopen('http://www.reddit.com/.json'))
-mask = jsonmask.Mask()
+mask = jsonmask.Mask('data/children(data/(title,permalink))')
 print mask(d)
 ```
 
